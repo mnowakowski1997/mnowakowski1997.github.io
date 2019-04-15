@@ -47,7 +47,7 @@ for k=1:numberOfFrames
            redLevels2(y,x,k) = redLevels1(y,x,k);
            redLevels1(y,x,k) = currentFrame(y,x,1);
            
-           if (abs(redLevels1(y,x,k) - redLevels2(y,x,k))  > 100) && (abs(redLevels1(y,x,k) - redLevels2(y,x,k))  < 190)
+           if (abs(redLevels1(y,x,k) - redLevels2(y,x,k))  > 97) && (abs(redLevels1(y,x,k) - redLevels2(y,x,k))  < 105)
                counterX(y,x) = counterX(y,x) + 1;
               
 
@@ -70,7 +70,7 @@ max(maxVal);
 
 for y=1:heigth
     for x=1:width
-        if(max(maxVal) - counterX(y,x) < 200) && (max(maxVal) - counterX(y,x) > 100)
+        if(max(maxVal) - counterX(y,x) < 208) && (max(maxVal) - counterX(y,x) > 190)
            readImage(y,x,:) = [255, 0, 0];
             
         end
