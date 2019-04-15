@@ -1,23 +1,28 @@
 clc;
-filename = 'G:\Pobrane\ryby\3fish7.avi';                          
-name = "3fish7"    ;            
+clear all;
+close all;
+filename = 'G:\Pobrane\ryby\3fish4.avi';                          
+name = "3fish4";            
 video = VideoReader(filename);                                 
 width = video.Width;                                                
-heigh = video.Height;                                               
-d = video.Duration;                                            
-s = struct('cdata',zeros(heigh,width,3,'uint8'),'colormap',[]);     
-k = 1;                                                     
+heigth = video.Height;                                               
+duration = video.Duration;                                                                                                   
 f = video.FrameRate;
 l = video.Duration;
 numberOfFrames = f*l;
 j=0;
+counter = 0;
+counterX = zeros(heigth,width);
+counterY = zeros(heigth,width);
+XY = [[]];
 
 
-pixelRed = zeros(heigh,width);
+pixelRed = zeros(heigth,width);
 grayLevels = zeros(numberOfFrames, 1);
-redLevels = zeros(heigh,width,numberOfFrames,'uint8');
-greenLevels = zeros(heigh,width,numberOfFrames,'uint8');
-blueLevels = zeros(heigh,width,numberOfFrames,'uint8');
+redLevels1 = zeros(heigth,width,numberOfFrames,'uint8');
+redLevels2 = zeros(heigth,width,numberOfFrames,'uint8');
+greenLevels = zeros(heigth,width,numberOfFrames,'uint8');
+blueLevels = zeros(heigth,width,numberOfFrames,'uint8');
 
 
 destinationFolder = 'G:\Pobrane\ryby\zdjecia';
@@ -25,19 +30,58 @@ if ~exist(destinationFolder, 'dir')
   mkdir(destinationFolder);
 end
 
-   framesToRead = 1:1:numberOfFrames;
-   allFrames = zeros(heigh, width, 3,numberOfFrames);
+
+
+
 for k=1:numberOfFrames
     currentFrame = readFrame(video);
     
-    for y=1:heigh
+    combinedString = sprintf(name + '_%d.jpg',j);
+    if ~exist(combinedString, 'file')
+        imwrite(currentFrame,combinedString);
+    end
+    readImage = imread("3fish4_1.jpg");
+    j = j + 1;
+    for y=1:heigth
         for x=1:width
-           redLevels(y,x,k) = currentFrame(y,x,1);
-            
-            
-            
+           redLevels2(y,x,k) = redLevels1(y,x,k);
+           redLevels1(y,x,k) = currentFrame(y,x,1);
+           
+           if (abs(redLevels1(y,x,k) - redLevels2(y,x,k))  > 100) && (abs(redLevels1(y,x,k) - redLevels2(y,x,k))  < 190)
+               counterX(y,x) = counterX(y,x) + 1;
+              
+
+           end
+           
         end
     end
 end   
+unikCounter = unique(counterX);
+val = unikCounter(1);
+idx = unikCounter > val;
+while (sum(idx) > 1)
+    idx = find(idx);
+    val = unikCounter(idx(1));
+    idx = unikCounter > val;
+    maxVal = unikCounter(idx);
+end
+display(maxVal);
+max(maxVal);
 
-display(redLevels(4,7,43))
+for y=1:heigth
+    for x=1:width
+        if(max(maxVal) - counterX(y,x) < 200) && (max(maxVal) - counterX(y,x) > 100)
+           readImage(y,x,:) = [255, 0, 0];
+            
+        end
+    end
+end
+
+imwrite(readImage,'1.jpg');
+
+
+imshow(readImage)
+
+
+display(redLevels1(4,7,43));
+display(redLevels2(4,7,43));
