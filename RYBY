@@ -1,0 +1,43 @@
+clc;
+filename = 'G:\Pobrane\ryby\3fish7.avi';                          
+name = "3fish7"    ;            
+video = VideoReader(filename);                                 
+width = video.Width;                                                
+heigh = video.Height;                                               
+d = video.Duration;                                            
+s = struct('cdata',zeros(heigh,width,3,'uint8'),'colormap',[]);     
+k = 1;                                                     
+f = video.FrameRate;
+l = video.Duration;
+numberOfFrames = f*l;
+j=0;
+
+
+pixelRed = zeros(heigh,width);
+grayLevels = zeros(numberOfFrames, 1);
+redLevels = zeros(heigh,width,numberOfFrames,'uint8');
+greenLevels = zeros(heigh,width,numberOfFrames,'uint8');
+blueLevels = zeros(heigh,width,numberOfFrames,'uint8');
+
+
+destinationFolder = 'G:\Pobrane\ryby\zdjecia';
+if ~exist(destinationFolder, 'dir')
+  mkdir(destinationFolder);
+end
+
+   framesToRead = 1:1:numberOfFrames;
+   allFrames = zeros(heigh, width, 3,numberOfFrames);
+for k=1:numberOfFrames
+    currentFrame = readFrame(video);
+    
+    for y=1:heigh
+        for x=1:width
+           redLevels(y,x,k) = currentFrame(y,x,1);
+            
+            
+            
+        end
+    end
+end   
+
+display(redLevels(4,7,43))
